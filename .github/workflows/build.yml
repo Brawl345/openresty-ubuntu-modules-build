@@ -1,0 +1,57 @@
+name: Build OpenResty with custom dynamic modules for Ubuntu/Debian
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Modules
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: repos
+          key: ${{ runner.os }}-repos
+        
+      - name: Checkout OpenResty-Packaging repository
+        uses: actions/checkout@v2
+        with:
+          repository: openresty/openresty-packaging
+          path: repos/openresty-packaging
+          
+      - name: Checkout nginx-dav-ext-module
+        uses: actions/checkout@v2
+        with:
+          repository: arut/nginx-dav-ext-module
+          path: repos/nginx-dav-ext-module
+
+      - name: Install dependencies
+        run: |
+          wget -O - https://openresty.org/package/pubkey.gpg | sudo apt-key add -
+          echo "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/openresty.list
+          sudo apt update
+          sudo apt install wget gnupg ca-certificates libtemplate-perl dh-systemd systemtap-sdt-dev perl gnupg curl make build-essential dh-make bzr-builddeb libxml2-dev libxslt-dev
+    
+      - name: Patch packaging rules
+        working-directory: repos/openresty-packaging/deb
+        run: |
+          sed -i "s|-j\$(NJBS)|-j\$(NJBS) --add-dynamic-module=$GITHUB_WORKSPACE/repos/nginx-dav-ext-module|g" openresty/debian/rules
+          cat openresty/debian/rules
+          
+      - name: Compile
+        continue-on-error: true
+        working-directory: repos/openresty-packaging/deb
+        run: make openresty-build
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Modules
+          path: repos/openresty-packaging/deb/openresty/build/nginx-*/objs/*.so
+          if-no-files-found: error
+          retention-days: 90
