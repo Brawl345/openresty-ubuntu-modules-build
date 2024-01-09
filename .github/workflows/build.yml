@@ -23,12 +23,14 @@ jobs:
         with:
           repository: openresty/openresty-packaging
           path: repos/openresty-packaging
+          ref: 'c91f9725af88769253b079bd376efb03526f5876'
           
       - name: Checkout nginx-dav-ext-module
         uses: actions/checkout@v3
         with:
           repository: arut/nginx-dav-ext-module
           path: repos/nginx-dav-ext-module
+          ref: 'f5e30888a256136d9c550bf1ada77d6ea78a48af'
 
       - name: Install dependencies
         run: |
