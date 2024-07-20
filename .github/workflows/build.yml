@@ -13,20 +13,20 @@ jobs:
     steps:
       - name: Cache
         id: cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: repos
           key: ${{ runner.os }}-repos
         
       - name: Checkout OpenResty-Packaging repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: openresty/openresty-packaging
           path: repos/openresty-packaging
-          ref: 'c91f9725af88769253b079bd376efb03526f5876'
+          ref: '64c5dff64f5777c14ec17dab68edae935ba9e142'
           
       - name: Checkout nginx-dav-ext-module
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: arut/nginx-dav-ext-module
           path: repos/nginx-dav-ext-module
@@ -52,7 +52,7 @@ jobs:
         run: make openresty-build
 
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Modules
           path: repos/openresty-packaging/deb/openresty/build/nginx-*/objs/*.so
