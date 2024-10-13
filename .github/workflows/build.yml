@@ -23,7 +23,7 @@ jobs:
         with:
           repository: openresty/openresty-packaging
           path: repos/openresty-packaging
-          ref: '64c5dff64f5777c14ec17dab68edae935ba9e142'
+          ref: 'ce3d7c9519309395d818ca968df254d9e5edced9'
           
       - name: Checkout nginx-dav-ext-module
         uses: actions/checkout@v4
