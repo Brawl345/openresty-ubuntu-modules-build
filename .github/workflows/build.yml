@@ -38,7 +38,7 @@ jobs:
           echo "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/openresty.list
           sudo apt update
           sudo apt upgrade
-          sudo apt install wget gnupg ca-certificates libtemplate-perl debhelper systemtap-sdt-dev perl gnupg curl make build-essential dh-make bzr-builddeb libxml2-dev libxslt-dev
+          sudo apt install wget gnupg ca-certificates libtemplate-perl debhelper systemtap-sdt-dev perl gnupg curl make build-essential dh-make libxml2-dev libxslt-dev
     
       - name: Patch packaging rules
         working-directory: repos/openresty-packaging/deb
